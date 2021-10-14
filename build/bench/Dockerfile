@@ -57,6 +57,13 @@ RUN apt-get update -y && apt-get install  \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+#To add microsoft odbc we need to install their apt repo
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN apt-get update -y && \
+    ACCEPT_EULA=Y apt-get install -y msodbcsql17
+
+
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
   && dpkg-reconfigure --frontend=noninteractive locales
 
